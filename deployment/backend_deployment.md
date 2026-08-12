@@ -20,10 +20,9 @@ Either service works the same way; steps below use Render.
    - `SMTP_USERNAME`
    - `SMTP_PASSWORD`
    - `SMTP_FROM`
-   - `FRONTEND_ORIGINS` — leave this blank for now; you'll set it in
-     step 9 below, once you know your Vercel URL. Until it's set, it
-     defaults to `http://localhost:3000` only, so your deployed
-     frontend will get CORS errors calling this backend.
+   - `FRONTEND_ORIGINS` — set this to your Vercel URL: 
+   `https://gitlab-ai-content-engine-s3ui-eight.vercel.app` (no trailing slash). 
+   Until this is set correctly, it defaults to `http://localhost:3000` only, so your deployed frontend will get CORS errors calling this backend.
 6. Click "Create Web Service." First deploy takes a few minutes.
 7. Once live, Render gives you a URL like `https://your-app.onrender.com`
    — test it by visiting `https://your-app.onrender.com/docs`
