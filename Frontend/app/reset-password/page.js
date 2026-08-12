@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import {Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -20,7 +20,7 @@ import {
 const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE || "http://127.0.0.1:8000";
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -503,3 +503,10 @@ export default function ResetPasswordPage() {
   );
 }
 
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<div className="p-8">Loading...</div>}>
+      <ResetPasswordContent />
+    </Suspense>
+  );
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 import SavedDrafts from "../../components/drafts/SavedDrafts";
@@ -13,7 +13,7 @@ const API_BASE =
 
 const AUTH_STORAGE_KEY = "gitlab_ace_auth";
 
-export default function Drafts() {
+function DraftsContent() {
 
   const searchParams = useSearchParams();
 
@@ -695,4 +695,12 @@ return (
   </main>
 );
 
+}
+
+export default function Drafts() {
+  return (
+    <Suspense fallback={<div className="p-8">Loading drafts...</div>}>
+      <DraftsContent />
+    </Suspense>
+  );
 }
