@@ -22,13 +22,21 @@ After verify/login, the frontend gets back an opaque session token
 that token as `Authorization: Bearer <token>`, and `get_current_user`
 below looks it up to find who's making the request and what role they
 have.
+
+PASSWORD RESET EMAIL:
+    Sent via Resend's HTTPS API (not raw SMTP) because outbound SMTP
+    ports (587/465) are blocked on many hosts, including Render's
+    free/starter tiers. Requires these env vars:
+        RESEND_API_KEY   - from https://resend.com (API Keys section)
+        FRONTEND_URL     - e.g. https://your-app.vercel.app
+                            (defaults to http://localhost:3000 for local dev)
 """
 
 import hashlib
+import os
 import re
 import secrets
-import smtplib
-from email.message import EmailMessage
+import resend
 from datetime import datetime, timedelta
 
 from fastapi import Depends, Header, HTTPException
@@ -43,6 +51,9 @@ PBKDF2_ITERATIONS = 260_000
 CODE_TTL_MINUTES = 15
 RESET_TOKEN_TTL_MINUTES = 15
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+
+resend.api_key = os.getenv("RESEND_API_KEY")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 
 def _hash(value: str, salt: str) -> str:
@@ -153,23 +164,19 @@ def verify_code(db: Session, email: str, code: str) -> str:
 
     return _create_session(db, email)
 
+
 def _send_reset_email(user_email: str, token: str):
-    # 1. Build the correct frontend URL
-    reset_link = f"http://localhost:3000/reset-password?token={token}"
-    
-    # 2. Format the email
-    msg = EmailMessage()
-    msg['Subject'] = "Reset Your Password"
-    msg['From'] = "gitlabproject000@gmail.com"
-    msg['To'] = user_email
-    msg.set_content(f"Please click this link to reset your password:\n\n{reset_link}")
-    
-    # 3. Send the email
+    # 1. Build the correct frontend URL (from env var — works locally AND in prod)
+    reset_link = f"{FRONTEND_URL}/reset-password?token={token}"
+
+    # 2. Send via Resend's HTTPS API (raw SMTP ports are blocked on Render)
     try:
-        with smtplib.SMTP("smtp.gmail.com", 587) as server:
-            server.starttls() # Secure the connection
-            server.login("gitlabproject000@gmail.com", "oorq vntu berq duqc")
-            server.send_message(msg)
+        resend.Emails.send({
+            "from": "onboarding@resend.dev",  # swap to your own verified domain later
+            "to": [user_email],
+            "subject": "Reset Your Password",
+            "text": f"Please click this link to reset your password:\n\n{reset_link}",
+        })
         print(f"SUCCESS: Reset email sent to {user_email}")
     except Exception as e:
         print(f"FAILED to send email: {e}")
@@ -203,6 +210,7 @@ def forgot_password(db: Session, email: str):
     return {
         "message": "Password reset link generated"
     }
+
 
 def reset_password(
     db: Session,
