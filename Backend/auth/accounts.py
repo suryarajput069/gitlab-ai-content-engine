@@ -166,19 +166,30 @@ def verify_code(db: Session, email: str, code: str) -> str:
 
 
 def _send_reset_email(user_email: str, token: str):
-    # 1. Build the correct frontend URL (from env var — works locally AND in prod)
     reset_link = f"{FRONTEND_URL}/reset-password?token={token}"
 
-    # 2. Send via Resend's HTTPS API (raw SMTP ports are blocked on Render)
+    if not os.getenv("BREVO_API_KEY"):
+        print(f"[DEV EMAIL] Reset link for {user_email}: {reset_link}")
+        return
+
+    import sib_api_v3_sdk
+    from sib_api_v3_sdk.rest import ApiException
+
+    configuration = sib_api_v3_sdk.Configuration()
+    configuration.api_key['api-key'] = os.getenv("BREVO_API_KEY")
+    api_instance = sib_api_v3_sdk.TransactionalEmailsApi(sib_api_v3_sdk.ApiClient(configuration))
+
+    send_email = sib_api_v3_sdk.SendSmtpEmail(
+        to=[{"email": user_email}],
+        sender={"email": os.getenv("BREVO_SENDER_EMAIL")},
+        subject="Reset Your Password",
+        text_content=f"Please click this link to reset your password:\n\n{reset_link}",
+    )
+
     try:
-        resend.Emails.send({
-            "from": "onboarding@resend.dev",  # swap to your own verified domain later
-            "to": [user_email],
-            "subject": "Reset Your Password",
-            "text": f"Please click this link to reset your password:\n\n{reset_link}",
-        })
+        api_instance.send_transac_email(send_email)
         print(f"SUCCESS: Reset email sent to {user_email}")
-    except Exception as e:
+    except ApiException as e:
         print(f"FAILED to send email: {e}")
 
 

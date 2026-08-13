@@ -1,41 +1,46 @@
 """
 auth/email_utils.py
 ---------------------
-Sends the signup verification code by email, via Resend's HTTPS API.
+Sends the signup verification code by email, via Brevo's HTTPS API.
 
 CONFIGURING REAL EMAIL DELIVERY:
 Add this to Render's Environment tab (or backend/.env for local dev):
-    RESEND_API_KEY=your-resend-api-key
+    BREVO_API_KEY=your-brevo-api-key
+    BREVO_SENDER_EMAIL=your-verified-sender@email.com
 
-WITHOUT RESEND_API_KEY CONFIGURED (local dev default):
-The code is printed to the backend console and written to audit.log
-instead of emailed, so you can still test the signup flow without
-setting up email. Look for a line like:
-    [DEV EMAIL] Verification code for someone@example.com: 123456
+WITHOUT BREVO_API_KEY CONFIGURED (local dev default):
+The code is printed to the backend console instead of emailed.
 """
 
 import os
-import resend
+import sib_api_v3_sdk
+from sib_api_v3_sdk.rest import ApiException
 
 from database.audit_log import log_event
 
-resend.api_key = os.getenv("RESEND_API_KEY")
+BREVO_API_KEY = os.getenv("BREVO_API_KEY")
+BREVO_SENDER_EMAIL = os.getenv("BREVO_SENDER_EMAIL")
+
+configuration = sib_api_v3_sdk.Configuration()
+configuration.api_key['api-key'] = BREVO_API_KEY
 
 
 def send_verification_code(email: str, code: str) -> None:
-    if not resend.api_key:
-        # Dev fallback: no Resend key configured, so just log it.
+    if not BREVO_API_KEY:
         print(f"[DEV EMAIL] Verification code for {email}: {code}")
         log_event("verification_code_logged_dev_mode", job_id=None, email=email)
         return
 
+    api_instance = sib_api_v3_sdk.TransactionalEmailsApi(sib_api_v3_sdk.ApiClient(configuration))
+    send_email = sib_api_v3_sdk.SendSmtpEmail(
+        to=[{"email": email}],
+        sender={"email": BREVO_SENDER_EMAIL},
+        subject="Your verification code",
+        text_content=f"Your verification code is: {code}\n\nThis code expires in 15 minutes.",
+    )
+
     try:
-        resend.Emails.send({
-            "from": "onboarding@resend.dev",
-            "to": [email],
-            "subject": "Your verification code",
-            "text": f"Your verification code is: {code}\n\nThis code expires in 15 minutes.",
-        })
+        api_instance.send_transac_email(send_email)
         print(f"SUCCESS: Verification code sent to {email}")
-    except Exception as e:
+    except ApiException as e:
         print(f"FAILED to send email: {e}")
