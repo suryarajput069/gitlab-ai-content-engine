@@ -326,7 +326,7 @@ Create and activate a Python virtual environment for the backend.
 ```bash
 cd backend
 python3 -m venv venv
-source venv/bin/activate 
+source venv/bin/activate
 ```
 
 ### 3. Install backend dependencies
@@ -343,7 +343,7 @@ Create a `.env` file from the provided example:
 cp .env.example .env
 ```
 
-Configure the required LLM, GitLab, SMTP, and database variables.
+Configure the required LLM, GitLab, email, and database variables.
 
 **Do not commit .env, API keys, passwords, or access tokens to GitHub.**
 
@@ -363,16 +363,6 @@ Start the FastAPI backend from the `backend` directory:
 python3 -m uvicorn main:app --reload
 ```
 
-Once the server starts, you can access:
-
-| Service | Local URL |
-|---|---|
-| **Backend API** | [http://127.0.0.1:8000](http://127.0.0.1:8000) |
-| **Interactive API Docs** | [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) |
-
-> The API documentation is provided by FastAPI's interactive Swagger interface.
-
-
 ### 7. Start the Frontend
 
 Open a **new terminal** from the project root and start the frontend:
@@ -382,12 +372,6 @@ cd frontend
 npm install
 npm run dev
 ```
-
-Once the development server starts, you can access:
-
-| Service | Local URL |
-| --- | --- |
-| **Frontend Application** | [http://localhost:3000](http://localhost:3000) |
 
 > If the frontend dependencies have already been installed, you can skip `npm install` and run `npm run dev`.
 
@@ -412,7 +396,7 @@ FastAPI Backend
 
 Open the **frontend** to use the application.
 
-Use the **FastAPI documentation** to inspect and test the backend API endpoints directly.
+The FastAPI documentation can be used to inspect and test the backend API endpoints when running the project locally.
 
 ---
 
@@ -427,11 +411,26 @@ Create a local `.env` file using `.env.example`.
 | `DATABASE_URL` | PostgreSQL / Supabase connection URL |
 | `GITLAB_URL` | GitLab API base URL, for example `https://gitlab.com/api/v4` |
 | `GITLAB_TOKEN` | GitLab personal/project access token used for GitLab API access |
-| `SMTP_HOST` | SMTP server hostname, e.g. `smtp.gmail.com` |
-| `SMTP_PORT` | SMTP server port, e.g. `587` |
-| `SMTP_USERNAME` | SMTP account username |
-| `SMTP_PASSWORD` | SMTP account/app password |
-| `SMTP_FROM` | Sender address used for application emails |
+| `BREVO_API_KEY` | Brevo API key used for transactional email delivery |
+| `BREVO_SENDER_EMAIL` | Verified sender email address used for application emails |
+| `FRONTEND_URL` | Frontend URL used when generating password-reset links |
+
+### Email & Authentication
+
+The application uses Brevo for transactional email delivery.
+
+Email functionality includes:
+- Signup verification codes
+- Password reset emails
+- Password reset links
+
+For the live application, email delivery is configured through Brevo using a verified sender email address.
+
+For local development, configure:
+- `BREVO_API_KEY`
+- `BREVO_SENDER_EMAIL`
+
+For security, real API keys and credentials must not be committed to GitHub.
 
 ### Security
 
@@ -442,7 +441,7 @@ Keep real credentials only in `.env` or the deployment platform's secret manager
 - API keys
 - Database passwords
 - GitLab tokens
-- SMTP passwords
+- Brevo API keys
 - Production `.env` files
 
 The `.env.example` file should contain variable names and safe placeholders only.
@@ -493,19 +492,19 @@ AI generation is not treated as the final publishing decision.
 ## Screenshots
 
 ### 1. Home / Product Overview
-<img width="1897" height="868" alt="Screenshot 2026-08-12 201328" src="https://github.com/user-attachments/assets/bee631a3-518f-4dd4-86d8-b4f450428dbf" />
+<img width="1379" height="757" alt="2" src="https://github.com/user-attachments/assets/badae35c-eaae-42c5-bcaf-09f9fa1d6701" />
 
 ### 2. Application Dashboard
-<img width="1899" height="866" alt="Screenshot 2026-08-12 201018" src="https://github.com/user-attachments/assets/55c4f3a5-6459-42a5-94a0-9da4b2949a4c" />
+<img width="2047" height="1163" alt="4" src="https://github.com/user-attachments/assets/9f2ee44f-9e5b-4692-99a9-36e9aba1bc3b" />
 
 ### 3. Generate Documentation
-<img width="1899" height="864" alt="Screenshot 2026-08-12 201104" src="https://github.com/user-attachments/assets/aed23a9c-7191-4007-b417-ee863722d2c2" />
+<img width="1291" height="769" alt="5" src="https://github.com/user-attachments/assets/762e0b17-7fe6-4fe4-a80a-433948cc0e9b" />
 
 ### 4. Context Preview / Source Grounding
-<img width="1898" height="858" alt="Screenshot 2026-08-12 201221" src="https://github.com/user-attachments/assets/e41a5a26-a45b-42cd-b40e-eaf089b6aaa2" />
+<img width="1288" height="779" alt="6" src="https://github.com/user-attachments/assets/6c9f81c1-42f6-4b8b-b3b1-48662777a5b1" />
 
 ### 5. Generated Documentation / Release Notes
-<img width="1900" height="864" alt="Screenshot 2026-08-12 201300" src="https://github.com/user-attachments/assets/a76ad90b-45de-423a-81ac-ffded6181705" />
+<img width="1280" height="756" alt="7" src="https://github.com/user-attachments/assets/971a3bd8-f1b9-405a-9e59-3dd895df4b57" />
 
 ---
 
