@@ -42,11 +42,16 @@ def get_llm() -> LLM:
     Central place to configure which LLM the whole system uses.
     Change the model name here and every agent updates automatically.
     Using Gemini's free tier is a good default for a student project.
+
+    max_retries: automatically retries on transient errors (like Gemini's
+    503 "high demand" responses), so a temporary overload doesn't fail
+    the whole crew run.
     """
     return LLM(
         model="gemini/gemini-flash-latest",
         api_key=os.getenv("GEMINI_API_KEY"),
         temperature=0.4,
+        max_retries=3,
     )
 
 
