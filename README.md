@@ -326,7 +326,7 @@ Create and activate a Python virtual environment for the backend.
 ```bash
 cd backend
 python3 -m venv venv
-source venv/bin/activate
+source venv/bin/activate 
 ```
 
 ### 3. Install backend dependencies
