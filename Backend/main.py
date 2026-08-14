@@ -17,7 +17,7 @@ HOW TO RUN THIS FILE:
 
 Then open http://127.0.0.1:8000/docs
 """
-import os  # UPDATED: FRONTEND_ORIGINS env var padhne ke liye zaroori
+import os  # UPDATED: FRONTEND_ORIGINS 
 
 from services.gitlab_service import GitLabService
 from fastapi import (
@@ -80,13 +80,10 @@ gitlab_service = GitLabService()
 repository_reader = RepositoryReader()
 context_builder = ContextBuilder()
 # --- UPDATED FOR DEPLOYMENT ---
-# Pehle yahan sirf localhost hardcoded tha, jisse deployed frontend
-# (Vercel URL) se aane wali requests CORS error de rahi thi.
-# Ab FRONTEND_ORIGINS env var se control hota hai, comma-separated URLs.
-# Local development ke liye default localhost hi rahega agar env var set na ho.
+
 frontend_origins = os.getenv(
     "FRONTEND_ORIGINS",
-    "http://localhost:3000,http://127.0.0.1:3000",
+    "https://gitlab-ai-content-engine-s3ui-eight.vercel.app,http://localhost:3000,http://127.0.0.1:3000",
 ).split(",")
 
 app.add_middleware(
