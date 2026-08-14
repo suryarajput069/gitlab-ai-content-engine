@@ -492,19 +492,19 @@ AI generation is not treated as the final publishing decision.
 ## Screenshots
 
 ### 1. Home / Product Overview
-<img width="1379" height="757" alt="2" src="https://github.com/user-attachments/assets/badae35c-eaae-42c5-bcaf-09f9fa1d6701" />
+<img width="1897" height="868" alt="Screenshot 2026-08-12 201328" src="https://github.com/user-attachments/assets/549dd2e6-a715-4491-80ad-e0bf758ba93e" />
 
 ### 2. Application Dashboard
-<img width="2047" height="1163" alt="4" src="https://github.com/user-attachments/assets/9f2ee44f-9e5b-4692-99a9-36e9aba1bc3b" />
+<img width="1899" height="866" alt="Screenshot 2026-08-12 201018" src="https://github.com/user-attachments/assets/2bbde643-9676-4e97-bb7d-219482b4c479" />
 
 ### 3. Generate Documentation
-<img width="1291" height="769" alt="5" src="https://github.com/user-attachments/assets/762e0b17-7fe6-4fe4-a80a-433948cc0e9b" />
+<img width="1899" height="864" alt="Screenshot 2026-08-12 201104" src="https://github.com/user-attachments/assets/09f3b331-d40f-4972-9ddf-b44884a17ca4" />
 
 ### 4. Context Preview / Source Grounding
-<img width="1288" height="779" alt="6" src="https://github.com/user-attachments/assets/6c9f81c1-42f6-4b8b-b3b1-48662777a5b1" />
+<img width="1898" height="858" alt="Screenshot 2026-08-12 201221" src="https://github.com/user-attachments/assets/10ab472f-7856-44c0-b256-6448c5463666" />
 
 ### 5. Generated Documentation / Release Notes
-<img width="1280" height="756" alt="7" src="https://github.com/user-attachments/assets/971a3bd8-f1b9-405a-9e59-3dd895df4b57" />
+<img width="1900" height="864" alt="Screenshot 2026-08-12 201300" src="https://github.com/user-attachments/assets/2a4a2b7a-091b-4960-970a-a911960538dc" />
 
 ---
 
