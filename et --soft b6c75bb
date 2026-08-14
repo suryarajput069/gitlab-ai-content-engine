@@ -1,6 +1,0 @@
-[33m8cb3e72[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Switch password reset email to Resend API
-[33m33ef2a6[m Switch password reset email to Resend API
-[33mb6c75bb[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Force IPv4 for SMTP connection
-[33mfa03731[m push
-[33m33f69a0[m Update frontend files
-[33md49a95c[m Merge branch 'main' of https://github.com/suryarajput069/gitlab-ai-content-engine
